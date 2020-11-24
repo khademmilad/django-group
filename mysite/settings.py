@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ruidm8jv(lcv+jw(soz2!=)tme5=7ss05m(yxtvs)=a=&be6x^'
+SECRET_KEY = 'cl%oii=ycja9+qq@(ep1k$a24iq*6pph$uslkzwzqrp*8-rsqp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ALLOWED_HOSTS = []
 
@@ -31,6 +35,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+#my applications
+    'account',
+
+
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,7 +64,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,"templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,6 +77,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'account.Account'
+
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
@@ -76,10 +88,9 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -113,8 +124,20 @@ USE_L10N = True
 
 USE_TZ = True
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 # 10mb = 10 * 1024 *1024
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
+
+TEMP = os.path.join(BASE_DIR, 'media_cdn/temp')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'media'),
+]
